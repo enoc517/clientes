@@ -5,7 +5,7 @@ const layout = () =>{
         <nav>
             <ul>
                 <li>
-                    <Link to="/formulariocompleto">FormularioCompleto</Link>
+                    <Link to="/formulariocompleto">Formulario Completo</Link>
                 </li>
                 <li>
 

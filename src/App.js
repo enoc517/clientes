@@ -1,18 +1,29 @@
-import './App.css';
-import { Routes , Route } from "react-router-dom";
-import Layout from "./pages/Layout";
-import FormularioCompleto from "./pages/FormularioCompleto";
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import Aside from './components/Aside';
+import Content from './components/Content';
+import FormularioCompleto from './pages/FormularioCompleto/FormularioCompleto';
+
 function App() {
   return (
-    <div>
-      <h1>Routes</h1>
-      <Routes>
-        <Route path="/" element={<Layout/>}>
-         <Route path="formulariocompleto" element={<FormularioCompleto/>}></Route>
-
-        </Route>
-      </Routes>
-    </div>
+    <Router>
+      <div className="App">
+        <Aside />
+        <Header />
+        <div className="wrapper">
+          <div className="content-wrapper">
+            <Routes>
+              <Route path="/formulariocompleto" element={<FormularioCompleto />} />
+              {/* Otras rutas */}
+            </Routes>
+            <Content />
+          </div>
+        </div>
+        <Footer />
+      </div>
+    </Router>
   );
 }
 
