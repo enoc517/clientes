@@ -1,44 +1,67 @@
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const formulariocompleto = () => {
-    return <div className="aline-center-items">
-        <div class="card">
-            <div class="card-body">
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon1">@</span>
-                    <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1"/>
-                </div>
+const FormulariosCompletados = () => {
+  const [formularios, setFormularios] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2"/>
-                        <span class="input-group-text" id="basic-addon2">@example.com</span>
-                </div>
+  useEffect(() => {
+    const fetchFormularios = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/formulariosCompletados'); // URL ajustada
+        setFormularios(response.data);
+        setLoading(false);
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+      }
+    };
 
-                <label for="basic-url" class="form-label">Your vanity URL</label>
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon3">https://example.com/users/</span>
-                    <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3"/>
-                </div>
+    fetchFormularios();
+  }, []);
 
-                <div class="input-group mb-3">
-                    <span class="input-group-text">$</span>
-                    <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)"/>
-                        <span class="input-group-text">.00</span>
-                </div>
+  if (loading) return <p>Cargando...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Username" aria-label="Username"/>
-                        <span class="input-group-text">@</span>
-                        <input type="text" class="form-control" placeholder="Server" aria-label="Server"/>
-                        </div>
+  return (
+    <div className="container mt-5">
+      <h1 className="mb-4">Formularios Completados</h1>
+      <div className="table-responsive">
+        <table className="table table-bordered table-hover">
+          <thead className="table-dark">
+            <tr>
+              <th>Formulario ID</th>
+              <th>Usuario ID</th>
+              <th>Puntuación Final</th>
+              <th>Fecha de Creación</th>
+              <th>Activo</th>
+              <th>Respuesta ID</th>
+            </tr>
+          </thead>
+          <tbody>
+            {formularios.length === 0 ? (
+              <tr>
+                <td colSpan="6" className="text-center">No hay formularios completados disponibles.</td>
+              </tr>
+            ) : (
+              formularios.map((formulario) => (
+                <tr key={formulario.FormularioCompletadoId}>
+                  <td>{formulario.FormularioId}</td>
+                  <td>{formulario.UsuarioId}</td>
+                  <td>{formulario.PuntuacionFinal}</td>
+                  <td>{new Date(formulario.Fechacreacion).toLocaleDateString()}</td>
+                  <td>{formulario.Activo ? 'Sí' : 'No'}</td>
+                  <td>{formulario.RespuestaId}</td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
 
-                        <div class="input-group">
-                            <span className="input-group-text">With textarea</span>
-                            <textarea class="form-control" aria-label="With textarea"></textarea>
-                        </div>
-                </div>
-            </div>
-    </div>;
-}
-
-export default formulariocompleto;
+export default FormulariosCompletados;
